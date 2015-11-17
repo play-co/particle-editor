@@ -59,6 +59,12 @@
     <div>
       <label>Polar</label><input type="checkbox" ng-model="effectData.polar">
     </div>
+    <div>
+      <label>flipX</label><input type="checkbox" ng-model="effectData.flipX">
+    </div>
+    <div>
+      <label>flipY</label><input type="checkbox" ng-model="effectData.flipY">
+    </div>
   </div>
   <div class="editor-section" ng-repeat="(section, parameters) in getSections(effectData)">
     <div class="section-header">{{section}}</div>

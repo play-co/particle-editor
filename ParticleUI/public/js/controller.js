@@ -43,8 +43,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "continuous",
       "count",
       "compositeOperation",
-      "polar",
-      "params"
+      "params",
+      "flipX",
+      "flipY",
     ];
 
     $scope.lifespanParameters = [
@@ -357,7 +358,12 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       }
 
       $scope.selectLayer(0);
+    };
+
+    $scope.containsPolarCoords = function(json) {
+      return (typeof json.radius === 'object') || (typeof json.theta === 'object'); 
     }
+
 
     $scope.parseLayerJson = function(effectJSON, index) {
 
@@ -367,13 +373,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         effectData[$scope.simpleParameters[i]] = effectJSON[$scope.simpleParameters[i]];
       }
 
-      // Copying the variable parameters is somewhat more complex
-      var variableParameters = $scope.variableParameters;
-      if (effectJSON.polar) {
-        variableParameters = $scope.variablePolarParameters;
-      }    
+      effectData.polar = $scope.containsPolarCoords(effectJSON);  
 
-        // Copying the variable parameters is somewhat more complex
+      // Copying the variable parameters is somewhat more complex
       var variableParameters = $scope.variableParameters;
       if (effectData.polar) {
         variableParameters = $scope.variablePolarParameters;
@@ -557,6 +559,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         anchorX: $scope.generateInitialValue(50),
         anchorY: $scope.generateInitialValue(50),
         compositeOperation: "source-over",
+        flipX: false,
+        flipY: false,
         images: [],
         params: [],
       });
