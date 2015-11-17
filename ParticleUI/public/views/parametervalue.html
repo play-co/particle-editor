@@ -1,0 +1,18 @@
+<div>
+  <div class="editor-line">
+    <select ng-model="state" ng-change="changeState()">
+      <option value="value">value</option>
+      <option value="range">range</option>
+    </select>
+    <div class="editor-line" ng-hide="state != 'value'">
+      <input type="number" step=".00001" ng-model="value"/>
+    </div>
+    <div class="editor-line" ng-hide="state != 'range'">
+      <input type="number" step=".00001" ng-model="range[0]"/>
+      to
+      <input type="number" step=".00001" ng-model="range[1]"/>
+      p-id
+      <input type="number" ng-model="range[2]">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "appID": "248d167e30e94b8bb84c18702455f62a",
+  "dependencies": {
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.0.2"
+  },
+  "shortName": "particleeditor",
+  "studio": {
+    "domain": "www.weeby.co",
+    "name": "weeby.co",
+    "stagingDomain": "staging.example.com"
+  },
+  "supportedOrientations": [
+    "portrait",
+    "landscape"
+  ],
+  "title": "particleeditor"
+}

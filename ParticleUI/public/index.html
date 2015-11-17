@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Particle Editor</title>
+    <link rel="stylesheet" href="isteven-angular-multiselect/isteven-multi-select.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="angular/angular.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/parametervalue.js"></script>
+    <script src="js/collapse.js"></script>
+    <script src="ng-file-upload/dist/ng-file-upload.js"></script>
+    <script src="isteven-angular-multiselect/isteven-multi-select.js"></script>
+</head>
+<body ng-app="ParticleEditor" ng-controller="EditorController">
+  <div class="header">
+    <div class="title">Particle Editor UI</div>
+    <div class="effect-load-box">
+      <label>Effect Title</label><input type="text" ng-model="effectTitle">
+      <a ng-href="{{ url }}" download="{{effectTitle}}.json" ng-hide="!url">Export Effect</a>
+    </div>
+    <button class="update-button" ng-click="update()">Update</button>
+  </div>
+
+  <div class="tab-header-section">
+    <div class="tab-header" ng-repeat="effect in effectLayers"
+     ng-class="{'active-header': $index==activeLayer}" ng-click="selectLayer($index)"
+     style="width: {{80.0 / effectLayers.length}}%">
+      {{$index}}
+      <button class="remove-layer-button" ng-click="removeLayer($index)"
+        ng-show="effectLayers.length > 1">x</button>
+    </div>
+    <button class="add-layer-button" ng-click="addLayer()">Add Layer</button>
+  </div>
+  <div class="editor-section">
+    <div class="section-header">Basic Effect Info</div>
+    <div>
+      <label>Images</label>
+      <isteven-multi-select    
+          input-model="availableFiles"    
+          output-model="effectData.images"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+      >
+      </isteven-multi-select>
+      <button class="update-button" ng-click="updateFiles()">Refresh Images</button>
+    </div>
+    <div>
+      <label>Composite Operation</label>
+      <select ng-model="effectData.compositeOperation"
+        ng-options="operation for operation in compositeOperations">
+      </select>
+    </div>
+    <div>
+      <label>Count</label>
+      <input type="number" step=".01" ng-model="effectData.count">
+    </div>
+    <div>
+      <label>Polar</label><input type="checkbox" ng-model="effectData.polar">
+    </div>
+  </div>
+  <div class="editor-section" ng-repeat="(section, parameters) in getSections(effectData)">
+    <div class="section-header">{{section}}</div>
+    <hr>
+    <div ng-repeat="param in parameters">
+      <div ng-include="'views/parameter.html'"></div>
+      <hr>
+    </div>
+  </div>
+  <div class="editor-section">
+    <div class="section-header">Lifespan</div>
+    <div ng-repeat="param in lifespanParameters">
+      <div class="param-header">
+        {{param}}
+      </div>
+      <div class="param-content">
+        <div class="param-section">
+          <div class="state-header">initial state</div>
+          <parametervalue
+            state="effectData[param].state"
+            singlevalue="effectData[param].value"
+            rangevalue="effectData[param].range"></parametervalue>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+  <div class="editor-section">
+    <div class="section-header">Parameters</div>
+    <button class="add-button" ng-click="addParameter()">Add Parameter</button>
+    <div ng-repeat="param in effectData.params">
+      <div class="evolution-step">
+        <button class="remove-button" ng-click="removeParameter($index)">Remove</button>
+        <div><label>ID:</label><input type="number" ng-model="param.id"></div>
+        <div><label>Distribution:</label><input type="text" ng-model="param.distribution"></div>
+        <div><label>Reset:</label><input type="number" ng-model="param.reset"></div>
+        <div><label>Random:</label><input type="checkbox" ng-model="param.random"></div>
+      </div>
+    </div>
+  </div>
+  <div class="editor-section">
+    <div class="section-header">Upload Effect File</div>
+    <input type="file" id="effectFile" name="file"/>
+    <button ng-click="uploadEffectFile()">Load Effect</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+ <div class="parameter">
+    <collapsable header="param">
+    <div class="param-content">
+      <div class="param-section">
+        <div class="state-header">initial state</div>
+        <parametervalue
+          state="effectData[param].initialState"
+          singlevalue="effectData[param].initialValue"
+          rangevalue="effectData[param].initialRange"></parametervalue>
+      </div>
+      <div class="param-section">
+        <div class="state-header">evolution</div>
+        <select
+          ng-model="effectData[param].evolution"
+          ng-change="onEvolutionChange(section, param)">
+          <option value="kinematic">kinematic</option>
+          <option value="state">state</option>
+        </select>
+        <button class="add-button" ng-click="addStep(param)"
+          ng-show="effectData[param].evolution=='state'">Add Step</button>
+        <div
+          class="evolution-step"
+          ng-repeat="step in effectData[param].finalSteps"
+          ng-hide="effectData[param].evolution != 'state'">
+          <label class="step-label">Step-{{$index}}</label>
+          <button
+            class="remove-button"
+            ng-click="removeStep(param, $index)">
+            Remove
+          </button>
+          <div class="step-content">
+            <parametervalue
+              state="step.finalState"
+              singlevalue="step.finalValue"
+              rangevalue="step.finalRange"></parametervalue>
+            <label>delay</label><input
+             type="number" step=".00001" min="0" max="1" ng-model="step.delay"/>
+            <label>duration</label><input
+             type="number" step=".00001" min="0" max="1" ng-model="step.duration"/>
+            <label>easing</label><input type="text" ng-model="step.easing"/>
+          </div>
+        </div>
+        <div ng-show="effectData[param].evolution == 'kinematic'">
+          param: d{{param}}
+        </div>
+      </div>
+    </div>
+    </collapsable>
+ </div>
