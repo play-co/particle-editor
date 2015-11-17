@@ -5,8 +5,8 @@
         <div class="state-header">initial state</div>
         <parametervalue
           state="effectData[param].initialState"
-          singlevalue="effectData[param].initialValue"
-          rangevalue="effectData[param].initialRange"></parametervalue>
+          singlevalue="effectData[param].value"
+          rangevalue="effectData[param].range"></parametervalue>
       </div>
       <div class="param-section">
         <div class="state-header">evolution</div>
@@ -20,7 +20,7 @@
           ng-show="effectData[param].evolution=='state'">Add Step</button>
         <div
           class="evolution-step"
-          ng-repeat="step in effectData[param].finalSteps"
+          ng-repeat="step in effectData[param].targets"
           ng-hide="effectData[param].evolution != 'state'">
           <label class="step-label">Step-{{$index}}</label>
           <button
@@ -31,8 +31,8 @@
           <div class="step-content">
             <parametervalue
               state="step.finalState"
-              singlevalue="step.finalValue"
-              rangevalue="step.finalRange"></parametervalue>
+              singlevalue="step.value"
+              rangevalue="step.range"></parametervalue>
             <label>delay</label><input
              type="number" step=".00001" min="0" max="1" ng-model="step.delay"/>
             <label>duration</label><input

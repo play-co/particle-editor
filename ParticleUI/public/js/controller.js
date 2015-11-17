@@ -61,21 +61,14 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.availableFiles = [];
 
-    $scope.easingFunctions = [
-      "animate.linear",
-      "animate.easeIn",
-      "animate.easeOut",
-      "animate.easeInOut"
-    ];
-
     $scope.generateInitialValue = function(value) {
       return {
         initialState: 'value',
-        initialValue: value,
-        initialRange: [value, value, null],
+        value: value,
+        range: [value, value, null],
         evolution: 'state',
-        finalSteps: [],
-        deltaParameter: null,
+        targets: [],
+        delta: null,
       };
     };
 
@@ -84,13 +77,13 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.effectTitle = "effect";
 
     $scope.addStep = function(param) {
-      $scope.effectData[param].finalSteps.push({
+      $scope.effectData[param].targets.push({
           finalState: 'value',
-          finalValue: 0,
-          finalRange: [0, 0, null],
+          value: 0,
+          range: [0, 0, null],
           delay: 0,
           duration: 1.0,
-          easing: "animate.linear",
+          easing: "linear",
         });
     };
 
@@ -103,7 +96,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.removeStep = function(param, index) {
-      $scope.effectData[param].finalSteps.splice(index, 1);
+      $scope.effectData[param].targets.splice(index, 1);
     }
 
     $scope.onEvolutionChange = function(section, param) {
@@ -147,7 +140,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.addParameter = function() {
       $scope.effectData.params.push({
         id: 0,
-        distribution: "animate.linear",
+        distribution: "linear",
         random: false,
         reset: 1000
       });
@@ -214,21 +207,21 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.pruneDeltaParamIfZero = function(param) {
-      if (param.deltaParam) {
-        if ($scope.pruneDeltaParamIfZero(param.deltaParam)) {
-          delete param.deltaParam;
-          if ($scope.valueIsZero(param.initialValue, param.initialRange)) {
+      if (param.delta) {
+        if ($scope.pruneDeltaParamIfZero(param.delta)) {
+          delete param.delta;
+          if ($scope.valueIsZero(param.value, param.range)) {
             return true;
           }
         }
         return false;
       } 
-      if ($scope.valueIsZero(param.initialValue, param.initialRange)) {
+      if ($scope.valueIsZero(param.ralue, param.vange)) {
         if ($scope.finalSteps === undefined) {
           return true;
         }
-        for (var i = 0; i < param.finalSteps.length; i++) {
-          if (!$scope.valueIsZero(param.finalSteps[i].finalValue, param.finalSteps[i].finalRange)) {
+        for (var i = 0; i < param.targets.length; i++) {
+          if (!$scope.valueIsZero(param.targets[i].value, param.targets[i].range)) {
             return false;
           }
         }
@@ -253,20 +246,20 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.buildParameterData = function(param, paramName, effectData) {
       var obj = {};
       if (param.initialState == "value") {
-        obj.initialValue = param.initialValue;
+        obj.value = param.value;
       } else {
-        obj.initialRange = $scope.trimRange(param.initialRange);
+        obj.range = $scope.trimRange(param.range);
       }
 
       if (param.evolution == "state") {
-        if (param.finalSteps.length > 0) {
-          obj.finalSteps = [];
+        if (param.targets.length > 0) {
+          obj.targets = [];
         }
-        for (var j = 0; j < param.finalSteps.length; j++) {
-          obj.finalSteps.push($scope.buildStep(param.finalSteps[j]));
+        for (var j = 0; j < param.targets.length; j++) {
+          obj.targets.push($scope.buildStep(param.targets[j]));
         }
       } else {
-        obj.deltaParam = $scope.buildParameterData(
+        obj.delta = $scope.buildParameterData(
           effectData['d' + paramName], 'd' + paramName, effectData);
       }
 
@@ -277,9 +270,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.buildStep = function(step) {
       var obj = {};
       if (step.finalState == 'value') {
-        obj.finalValue = step.finalValue;
+        obj.value = step.value;
       } else {
-        obj.finalRange = $scope.trimRange(step.finalRange);
+        obj.range = $scope.trimRange(step.range);
       }
       obj.delay = step.delay;
       obj.duration = step.duration;
@@ -357,7 +350,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.loadEffectJson = function(effectJSON) {
       $scope.effectLayers = [];
-
+      $scope.resetSectionLayers();
       for (var i = 0; i < effectJSON.length; i++) {
         $scope.addLayer();
         $scope.parseLayerJson(effectJSON[i], i);
@@ -436,27 +429,27 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.buildParameterFromJSON = function(param, paramName, sectionParameters, effectData) {
       var data = $scope.generateInitialValue(0);
-      if (param.initialValue != undefined) {
-        data.initialValue = param.initialValue;
+      if (param.value != undefined) {
+        data.value = param.value;
         data.initialState = "value";
       } else {
-        data.initialRange = param.initialRange;
+        data.range = param.range;
         data.initialState = "range";
-        if (data.initialRange.length < 3) {
-          data.initialRange[2] = null;
+        if (data.range.length < 3) {
+          data.range[2] = null;
         }
       }
-      if (param.deltaParam != undefined) {
+      if (param.delta != undefined) {
         data.evolution = "kinematic";
         var index = sectionParameters.indexOf(paramName);
         sectionParameters.splice(index + 1, 0, "d" + paramName);
         $scope.buildParameterFromJSON(
-          param.deltaParam, "d" + paramName, sectionParameters, effectData);
-      } else if (param.finalSteps != undefined) {
+          param.delta, "d" + paramName, sectionParameters, effectData);
+      } else if (param.targets != undefined) {
         data.evolution = "state";
-        data.finalSteps = [];
-        for (var i = 0; i < param.finalSteps.length; i++) {
-          data.finalSteps.push($scope.buildStepFromJSON(param.finalSteps[i]));
+        data.targets = [];
+        for (var i = 0; i < param.targets.length; i++) {
+          data.targets.push($scope.buildStepFromJSON(param.targets[i]));
         }
       } else {
         data.evolution = "state";
@@ -468,17 +461,17 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.buildStepFromJSON = function(stepJSON) {
       var data = {
-        finalValue: 0,
-        finalRange: [0, 0, null],
+        value: 0,
+        range: [0, 0, null],
         finalState: 'value',
       };
-      if (stepJSON.finalValue) {
-        data.finalValue = stepJSON.finalValue;
+      if (stepJSON.value) {
+        data.value = stepJSON.value;
       } else {
-        data.finalRange = stepJSON.finalRange;
+        data.range = stepJSON.range;
         data.finalState = "range";
-        if (data.finalRange < 3) {
-          data.finalRange[2] = null;
+        if (data.range < 3) {
+          data.range[2] = null;
         }
       }
       data.delay = stepJSON.delay;
@@ -492,6 +485,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         $scope.fileMap[key].ticked = false;
       }
     };
+
+    $scope.resetSectionLayers = function() {
+      $scope.carteseanSectionLayers = [];
+      $scope.polarSectionLayers = [];
+    }
 
     $scope.addLayer = function() {
       $scope.carteseanSectionLayers.push({
