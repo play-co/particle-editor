@@ -12,14 +12,16 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "scale",
       "scaleX",
       "scaleY",
+      "offsetX",
+      "offsetY",
       "opacity",
+    ];
+
+    $scope.tempParameters = [
       "height",
       "width",
       "anchorX",
       "anchorY",
-      "offsetX",
-      "offsetY",
-      "zIndex"
     ];
 
     $scope.variablePolarParameters = [
@@ -30,27 +32,21 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "scaleX",
       "scaleY",
       "opacity",
-      "height",
-      "width",
-      "anchorX",
-      "anchorY",
       "offsetX",
       "offsetY",
-      "zIndex",
     ];
 
     $scope.simpleParameters = [
       "continuous",
       "count",
       "compositeOperation",
-      "params",
+      "parameters",
       "flipX",
       "flipY",
     ];
 
     $scope.lifespanParameters = [
       "ttl",
-      "delay",
     ]
 
 
@@ -139,8 +135,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.addParameter = function() {
-      $scope.effectData.params.push({
-        id: 0,
+      $scope.effectData.parameters.push({
+        id: "0",
         distribution: "linear",
         random: false,
         reset: 1000
@@ -148,7 +144,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.removeParameter = function(index) {
-      $scope.effectData.params.splice(index, 1);
+      $scope.effectData.parameters.splice(index, 1);
     };
 
     $scope.update = function() {
@@ -157,7 +153,6 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       for (var i = 0; i < $scope.effectLayers.length; i++) {
         data.push($scope.buildEffectData(i));
       }
-      console.log("effect data", data);
 
       $scope.updateDownloadLink(data);
       $http.post("http://localhost:3000/update",data);
@@ -172,6 +167,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         data[$scope.simpleParameters[i]] = effectData[$scope.simpleParameters[i]];
       }
 
+
       // Copying the variable parameters is somewhat more complex
       var variableParameters = $scope.variableParameters;
       if (effectData.polar) {
@@ -183,6 +179,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         data[paramName] = $scope.buildParameterData(param, paramName, effectData);
         // Prune any delta params that will always be zero.
         $scope.pruneDeltaParamIfZero(data[paramName]);
+      }
+
+      for (var i = 0; i < $scope.tempParameters.length; i++) {
+        var paramName = $scope.tempParameters[i];
+        data[paramName] = effectData[paramName].value;
       }
 
       for (var i = 0; i < $scope.lifespanParameters.length; i++) {
@@ -198,9 +199,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         data[paramName] = obj;
       }
 
-      data.images = [];
-      for (var i = 0; i < effectData.images.length; i++) {
-        data.images.push(effectData.images[i].name);
+      data.image = [];
+      for (var i = 0; i < effectData.image.length; i++) {
+        data.image.push(effectData.image[i].name);
       }
 
       return data;
@@ -357,7 +358,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         $scope.parseLayerJson(effectJSON[i], i);
       }
 
-      $scope.selectLayer(0);
+      $timeout(function() {
+        $scope.selectLayer(0);
+      }, 500);
+
     };
 
     $scope.containsPolarCoords = function(json) {
@@ -413,10 +417,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         effectData[paramName] = obj;
       }
 
-      effectData.images = [];
-      for (var i = 0; i < effectJSON.images.length; i++) {
-        var image = $scope.fileMap[effectJSON.images[i]];
-        effectData.images.push(image);
+      effectData.image = [];
+      for (var i = 0; i < effectJSON.image.length; i++) {
+        var image = $scope.fileMap[effectJSON.image[i]];
+        effectData.image.push(image);
       }
     };
 
@@ -431,7 +435,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.buildParameterFromJSON = function(param, paramName, sectionParameters, effectData) {
       var data = $scope.generateInitialValue(0);
-      if (param.value != undefined) {
+      if (param.value !== undefined) {
         data.value = param.value;
         data.initialState = "value";
       } else {
@@ -467,8 +471,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         range: [0, 0, null],
         finalState: 'value',
       };
-      if (stepJSON.value) {
+      if (stepJSON.value !== undefined) {
         data.value = stepJSON.value;
+        data.finalState = "value";
       } else {
         data.range = stepJSON.range;
         data.finalState = "range";
@@ -561,8 +566,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         compositeOperation: "source-over",
         flipX: false,
         flipY: false,
-        images: [],
-        params: [],
+        image: [],
+        parameters: [],
       });
 
     };
@@ -581,8 +586,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       $scope.polarSections = $scope.polarSectionLayers[index];
       $scope.clearSelectedFiles();
 
-      for (var i = 0; i < $scope.effectData.images.length; i++) {
-        $scope.fileMap[$scope.effectData.images[i].name].ticked = true;
+      for (var i = 0; i < $scope.effectData.image.length; i++) {
+        $scope.fileMap[$scope.effectData.image[i].name].ticked = true;
       }
       $scope.applyAsync();
     };

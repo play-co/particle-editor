@@ -38,7 +38,7 @@
       <label>Images</label>
       <isteven-multi-select    
           input-model="availableFiles"    
-          output-model="effectData.images"
+          output-model="effectData.image"
           button-label="name"
           item-label="name"
           tick-property="ticked"
@@ -55,6 +55,9 @@
     <div>
       <label>Count</label>
       <input type="number" step=".01" ng-model="effectData.count">
+    </div>
+    <div>
+      <label>Continuous</label><input type="checkbox" ng-model="effectData.continuous">
     </div>
     <div>
       <label>Polar</label><input type="checkbox" ng-model="effectData.polar">
@@ -95,10 +98,10 @@
   <div class="editor-section">
     <div class="section-header">Parameters</div>
     <button class="add-button" ng-click="addParameter()">Add Parameter</button>
-    <div ng-repeat="param in effectData.params">
+    <div ng-repeat="param in effectData.parameters">
       <div class="evolution-step">
         <button class="remove-button" ng-click="removeParameter($index)">Remove</button>
-        <div><label>ID:</label><input type="number" ng-model="param.id"></div>
+        <div><label>ID:</label><input type="text" ng-model="param.id"></div>
         <div><label>Distribution:</label><input type="text" ng-model="param.distribution"></div>
         <div><label>Reset:</label><input type="number" ng-model="param.reset"></div>
         <div><label>Random:</label><input type="checkbox" ng-model="param.random"></div>

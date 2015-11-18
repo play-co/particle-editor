@@ -10,7 +10,6 @@ angular.module('ParticleEditor.directives', [])
         name: "=paramname",
       },
       controller: ['$scope', function($scope) {
-        console.log("building param");
         $scope.hasParam = function() {
 
           if ($scope.name) {
