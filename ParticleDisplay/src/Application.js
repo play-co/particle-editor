@@ -1,5 +1,5 @@
 
-import src.effectsEngine as effectsEngine;
+import ui.effectsEngine as effectsEngine;
 import device;
 import animate;
 
@@ -10,27 +10,6 @@ exports = Class(GC.Application, function () {
 
   this.initUI = function () {
 
-    /*this.particleResource = new ParticleResource({
-      parent: this.view,
-      baseImageUrl: "http://localhost:3000/images",
-      x: PARTICLE_WINDOW_WIDTH / 2,
-      y: PARTICLE_WINDOW_HEIGHT / 2,
-    })
-
-    this.particleResource.loadEffect({
-      continuous: true,
-      autoplay: true,
-      maxScale: 1,
-      ttl: {min: 3000, max: 3000},
-      spawnRate: 10,
-
-      emitter: {
-        type: "anulus",
-        radius: {min: 200, max: 250},
-        radialVelocity: true,
-        radialSpeed: {min: -100, max: 50},
-      }
-    }, true);*/
     this.view.addSubview(effectsEngine);
     this.emitEffect();
     this.view.onInputSelect = bind(this, this.emitTestEffect);
