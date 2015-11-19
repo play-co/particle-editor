@@ -12,8 +12,6 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "scale",
       "scaleX",
       "scaleY",
-      "offsetX",
-      "offsetY",
       "opacity",
     ];
 
@@ -512,8 +510,6 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "x",
           "y",
           "r",
-          "offsetX",
-          "offsetY"
         ],
         "display": [
           "scale",
