@@ -10,7 +10,7 @@
 .fixed-scroll {
   position: fixed;
   top: 10px;
-  right: 93%;
+  left: 93%;
 }
 
 .fadeout {
