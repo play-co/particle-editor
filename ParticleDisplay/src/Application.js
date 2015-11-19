@@ -64,7 +64,7 @@ exports = Class(GC.Application, function () {
           effect.image[j] = "http://localhost:3000/" + effect.image[j];
         }
       }
-      effectsEngine.clearEffects();
+      effectsEngine.clearAllEffects();
       effectsEngine.emitEffectsFromData(params, {
         id: "editor-effect",
         x: PARTICLE_WINDOW_WIDTH / 2,
@@ -83,10 +83,10 @@ exports = Class(GC.Application, function () {
     "params": [],
     "flipX": false,
     "flipY": false,
-    "r": {
-      "value": 0
-    },
     "theta": {
+      "range": [0, 6.28]
+    },
+    "r": {
       "range": [
         0,
         6.28

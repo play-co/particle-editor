@@ -1,7 +1,7 @@
 {
   "appID": "248d167e30e94b8bb84c18702455f62a",
   "dependencies": {
-    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.0.2"
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.0.7"
   },
   "shortName": "particleeditor",
   "studio": {
