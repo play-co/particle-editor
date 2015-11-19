@@ -9,12 +9,12 @@
           rangevalue="effectData[param].range"></parametervalue>
       </div>
       <div class="param-section">
-        <div class="state-header">evolution</div>
+        <div class="state-header">Change Over Time</div>
         <select
           ng-model="effectData[param].evolution"
           ng-change="onEvolutionChange(section, param)">
-          <option value="kinematic">kinematic</option>
-          <option value="state">state</option>
+          <option value="kinematic">delta (px/sec)</option>
+          <option value="state">animated (timestep)</option>
         </select>
         <button class="add-button" ng-click="addStep(param)"
           ng-show="effectData[param].evolution=='state'">Add Step</button>

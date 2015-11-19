@@ -32,8 +32,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "scaleX",
       "scaleY",
       "opacity",
-      "offsetX",
-      "offsetY",
+      "x",
+      "y",
     ];
 
     $scope.simpleParameters = [
@@ -374,7 +374,9 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       var effectData = $scope.effectLayers[index];
 
       for (var i = 0; i < $scope.simpleParameters.length; i++) {
-        effectData[$scope.simpleParameters[i]] = effectJSON[$scope.simpleParameters[i]];
+        if (effectJSON[$scope.simpleParameters[i]] !== undefined) {
+          effectData[$scope.simpleParameters[i]] = effectJSON[$scope.simpleParameters[i]];
+        }
       }
 
       effectData.polar = $scope.containsPolarCoords(effectJSON);  
@@ -396,13 +398,18 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         var param = effectJSON[paramName];
         var section = $scope.getParameterSection(paramName, sections);
         var sectionParameters = sections[section];
-        $scope.buildParameterFromJSON(param, paramName, sectionParameters, effectData);
+        if (param !== undefined) {
+          $scope.buildParameterFromJSON(param, paramName, sectionParameters, effectData);
+        }
       }
 
       for (var i = 0; i < $scope.lifespanParameters.length; i++) {
         var obj = {value: 0, range: [0, 0, null], state: "value"};
         var paramName = $scope.lifespanParameters[i];
         var param = effectJSON[paramName];  
+        if (param === undefined) {
+          continue;
+        }
         if (param.value != undefined) {
           obj.state = "value";
           obj.value = param.value;
@@ -435,6 +442,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.buildParameterFromJSON = function(param, paramName, sectionParameters, effectData) {
       var data = $scope.generateInitialValue(0);
+
       if (param.value !== undefined) {
         data.value = param.value;
         data.initialState = "value";
@@ -522,11 +530,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
       $scope.polarSectionLayers.push({
         "position": [
+          "x",
+          "y",
           "r",
           "theta",
-          "radius",
-          "offsetX",
-          "offsetY"
+          "radius"
         ],
         "display": [
           "scale",
