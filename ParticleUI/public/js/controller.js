@@ -97,6 +97,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.onEvolutionChange = function(section, param) {
       var parameter = $scope.effectData[param];
       $scope.addRemoveDeltaParam(section, param, parameter.evolution);
+      $scope.applyAsync();
     };
 
     $scope.addRemoveDeltaParam = function(section, param, evolution, deltaState) {

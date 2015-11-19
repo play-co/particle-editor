@@ -7,6 +7,12 @@
   min-width: 500px;
 }
 
+.fixed-scroll {
+  position: fixed;
+  top: 10px;
+  right: 93%;
+}
+
 .fadeout {
   position: absolute;
   height: 100%;
