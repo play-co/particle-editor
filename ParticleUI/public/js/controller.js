@@ -42,7 +42,6 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "continuous",
       "count",
       "compositeOperation",
-      "parameters",
       "flipX",
       "flipY",
     ];
@@ -95,6 +94,12 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       'indexOverTime',
       'random'
     ];
+    $scope.parameterKeys = [
+      "id",
+      "distributionFunction",
+      "distributionType",
+      "resetInterval",
+      "reverseReset"];
 
     $scope.carteseanSectionLayers = []
     $scope.polarSectionLayers = [];
@@ -189,7 +194,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         id: "0",
         distributionFunction: "linear",
         distributionType: "random",
-        resetInterval: 16
+        resetInterval: 16,
+        reverseReset: false
       });
     };
 
@@ -247,6 +253,16 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         }
 
         data[paramName] = obj;
+      }
+
+      data.parameters = [];
+      for (var i = 0; i < effectData.parameters.length; i++) {
+        var obj = {};
+        for (var j = 0; j < $scope.parameterKeys.length; j++) {
+          var key = $scope.parameterKeys[j];
+          obj[key] = effectData.parameters[i][key];
+        }
+        data.parameters.push(obj);
       }
 
       data.image = [];
@@ -427,6 +443,16 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         if (effectJSON[$scope.simpleParameters[i]] !== undefined) {
           effectData[$scope.simpleParameters[i]] = effectJSON[$scope.simpleParameters[i]];
         }
+      }
+
+      effectData.parameters = [];
+      for (var i = 0; i < effectJSON.parameters.length; i++) {
+        var obj = {};
+        for (var j = 0; j < $scope.parameterKeys.length; j++) {
+          var key = $scope.parameterKeys[j];
+          obj[key] = effectJSON.parameters[i][key];
+        }
+        effectData.parameters.push(obj);
       }
 
       effectData.polar = $scope.containsPolarCoords(effectJSON);  
