@@ -52,6 +52,49 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "delay",
     ]
 
+    $scope.easingFunctions = [
+      "linear",
+      "easeIn",
+      "easeOut",
+      "easeInOut",
+      "easeInQuad",
+      "easeOutQuad",
+      "easeInOutQuad",
+      "easeInCubic",
+      "easeOutCubic",
+      "easeInOutCubic",
+      "easeInQuart",
+      "easeOutQuart",
+      "easeInOutQuart",
+      "easeInQuint",
+      "easeOutQuint",
+      "easeInOutQuint",
+      "easeInSine",
+      "easeOutSine",
+      "easeInOutSine",
+      "easeInExpo",
+      "easeOutExpo",
+      "easeInOutExpo",
+      "easeInCirc",
+      "easeOutCirc",
+      "easeInOutCirc",
+      "easeInElastic",
+      "easeOutElastic",
+      "easeInOutElastic",
+      "easeInBack",
+      "easeOutBack",
+      "easeInOutBack",
+      "easeInBounce",
+      "easeOutBounce",
+      "easeInOutBounce",
+    ];  
+
+    $scope.distributionTypes = [
+      'index',
+      'time',
+      'indexOverTime',
+      'random'
+    ];
 
     $scope.carteseanSectionLayers = []
     $scope.polarSectionLayers = [];
@@ -73,7 +116,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.availableImages = [];
-    $scope.compositeOperations = ["", "lighter"];
+    $scope.compositeOperations = [
+      { name: "source-over", operation: "" },
+      { name: "lighter", operation: "lighter"}
+    ];
     $scope.effectTitle = "effect";
 
     $scope.addStep = function(param) {
@@ -141,8 +187,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     $scope.addParameter = function() {
       $scope.effectData.parameters.push({
         id: "0",
-        distribution: "linear",
-        random: false,
+        distributionFunction: "linear",
+        distributionType: "random",
         resetInterval: 16
       });
     };
@@ -157,7 +203,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       for (var i = 0; i < $scope.effectLayers.length; i++) {
         data.push($scope.buildEffectData(i));
       }
-
+      console.log("updating with data", data);
       $scope.updateDownloadLink(data);
       $http.post("http://localhost:3000/update",data);
     };

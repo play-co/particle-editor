@@ -48,8 +48,11 @@
     </div>
     <div>
       <label>Composite Operation</label>
-      <select ng-model="effectData.compositeOperation"
-        ng-options="operation for operation in compositeOperations">
+      <select ng-model="effectData.compositeOperation">
+        <option
+          ng-repeat="operation in compositeOperations"
+          value="{{operation.operation}}">{{operation.name}}
+        </option>
       </select>
     </div>
     <div>
@@ -102,9 +105,17 @@
       <div class="evolution-step">
         <button class="remove-button" ng-click="removeParameter($index)">Remove</button>
         <div><label>ID:</label><input type="text" ng-model="param.id"></div>
-        <div><label>Distribution:</label><input type="text" ng-model="param.distribution"></div>
+        <div><label>Distribution Function:</label><select
+              ng-options="easing for easing in easingFunctions"
+              ng-model="param.distributionFunction"/></div>
         <div><label>Reset Interval:</label><input type="number" ng-model="param.resetInterval"></div>
-        <div><label>Random:</label><input type="checkbox" ng-model="param.random"></div>
+        <div>
+          <label>Distribution Type:</label>
+          <select
+              ng-options="distribution for distribution in distributionTypes"
+              ng-model="param.distributionType">
+          </select>
+        </div>
       </div>
     </div>
   </div>

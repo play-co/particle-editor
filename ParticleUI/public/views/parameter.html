@@ -37,7 +37,9 @@
              type="number" step=".00001" min="0" ng-model="step.delay"/>
             <label>duration</label><input
              type="number" step=".00001" min="0" ng-model="step.duration"/>
-            <label>easing</label><input type="text" ng-model="step.easing"/>
+            <label>easing</label><select
+              ng-options="easing for easing in easingFunctions"
+              ng-model="step.easing"/>
           </div>
         </div>
         <div ng-show="effectData[param].evolution == 'kinematic'">
