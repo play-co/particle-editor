@@ -13,13 +13,13 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "scaleX",
       "scaleY",
       "opacity",
-    ];
-
-    $scope.tempParameters = [
       "height",
       "width",
       "anchorX",
-      "anchorY",
+      "anchorY"
+    ];
+
+    $scope.tempParameters = [
     ];
 
     $scope.variablePolarParameters = [
@@ -32,6 +32,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "opacity",
       "x",
       "y",
+      "height",
+      "width",
+      "anchorX",
+      "anchorY"
     ];
 
     $scope.simpleParameters = [
@@ -45,6 +49,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
     $scope.lifespanParameters = [
       "ttl",
+      "delay",
     ]
 
 
@@ -517,11 +522,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "scaleX",
           "scaleY",
           "opacity",
+          "zIndex",
           "height",
           "width",
           "anchorX",
           "anchorY",
-          "zIndex",
         ]
       });
 
@@ -538,11 +543,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "scaleX",
           "scaleY",
           "opacity",
+          "zIndex",
           "height",
           "width",
           "anchorX",
           "anchorY",
-          "zIndex",
         ]
       });
 
