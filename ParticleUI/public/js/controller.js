@@ -68,7 +68,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
     };
 
     $scope.availableImages = [];
-    $scope.compositeOperations = ["source-over", "lighter"];
+    $scope.compositeOperations = ["", "lighter"];
     $scope.effectTitle = "effect";
 
     $scope.addStep = function(param) {
@@ -138,7 +138,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         id: "0",
         distribution: "linear",
         random: false,
-        reset: 1000
+        resetInterval: 16
       });
     };
 
@@ -568,7 +568,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         width: $scope.generateInitialValue(100),
         anchorX: $scope.generateInitialValue(50),
         anchorY: $scope.generateInitialValue(50),
-        compositeOperation: "source-over",
+        compositeOperation: "",
         flipX: false,
         flipY: false,
         image: [],
