@@ -56,6 +56,15 @@
       </select>
     </div>
     <div>
+      <label>Filter Type</label>
+      <select ng-model="effectData.filterType">
+        <option
+          ng-repeat="type in filterTypes"
+          value="{{type.name}}">{{type.id}}
+        </option>
+      </select>
+    </div>
+    <div>
       <label>Count</label>
       <input type="number" step=".01" ng-model="effectData.count">
     </div>

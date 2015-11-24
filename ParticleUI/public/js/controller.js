@@ -16,7 +16,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "height",
       "width",
       "anchorX",
-      "anchorY"
+      "anchorY",
+      "filterRed",
+      "filterBlue",
+      "filterGreen",
+      "filterAlpha"
     ];
 
     $scope.tempParameters = [
@@ -35,7 +39,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "height",
       "width",
       "anchorX",
-      "anchorY"
+      "anchorY",
+      "filterRed",
+      "filterBlue",
+      "filterGreen",
+      "filterAlpha"
     ];
 
     $scope.simpleParameters = [
@@ -44,6 +52,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "compositeOperation",
       "flipX",
       "flipY",
+      "filterType",
     ];
 
     $scope.lifespanParameters = [
@@ -94,6 +103,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       'indexOverTime',
       'random'
     ];
+
     $scope.parameterKeys = [
       "id",
       "distributionFunction",
@@ -125,6 +135,14 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       { name: "source-over", operation: "" },
       { name: "lighter", operation: "lighter"}
     ];
+
+    $scope.filterTypes = [
+      { name: "none", id: ""},
+      { name: "Linear Add", id: "LinearAdd"},
+      { name: "Multiply", id: "Multiply"},
+      { name: "Tint", id: "Tint"}
+    ];
+
     $scope.effectTitle = "effect";
 
     $scope.addStep = function(param) {
@@ -599,6 +617,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "width",
           "anchorX",
           "anchorY",
+          "filterRed",
+          "filterBlue",
+          "filterGreen",
+          "filterAlpha"
         ]
       });
 
@@ -620,6 +642,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "width",
           "anchorX",
           "anchorY",
+          "filterRed",
+          "filterBlue",
+          "filterGreen",
+          "filterAlpha"
         ]
       });
 
@@ -646,10 +672,15 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         anchorX: $scope.generateInitialValue(50),
         anchorY: $scope.generateInitialValue(50),
         compositeOperation: "",
+        filterType: "",
         flipX: false,
         flipY: false,
         image: [],
         parameters: [],
+        filterRed: $scope.generateInitialValue(255),
+        filterBlue: $scope.generateInitialValue(255),
+        filterGreen: $scope.generateInitialValue(255),
+        filterAlpha: $scope.generateInitialValue(1),
       });
 
     };

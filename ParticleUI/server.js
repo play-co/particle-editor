@@ -10,7 +10,11 @@ var IMAGE_FORMATS = [".png", ".jpg", ".gif", ".tif"];
 var PROJECT_FOLDER = process.argv[2];
 
 app.use( bodyParser.json() ); 
-
+app.use(function(req, res, next) {
+  res.header({"Access-Control-Allow-Origin": "*"});
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 if (PROJECT_FOLDER) {
   console.log("Starting up in project folder", PROJECT_FOLDER);
   app.use(express.static(PROJECT_FOLDER));
