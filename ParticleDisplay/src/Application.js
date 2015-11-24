@@ -1,20 +1,41 @@
 
 import ui.effectsEngine as effectsEngine;
+import ui.TextView as TextView;
 import device;
 import animate;
 
 exports = Class(GC.Application, function () {
-
   var PARTICLE_WINDOW_HEIGHT = device.height;
   var PARTICLE_WINDOW_WIDTH = device.width;
 
   this.initUI = function () {
-
     this.view.addSubview(effectsEngine);
-    this.emitEffect();
-    this.view.onInputSelect = bind(this, this.emitTestEffect);
-    this.connectToServer();
 
+    var paused = false;
+    this.view.onInputSelect = bind(this, function () {
+      this.emitEffect();
+      // paused = !paused;
+      // if (paused) {
+      //   effectsEngine.pauseAllEffects();
+      // } else {
+      //   effectsEngine.resumeAllEffects();
+      // }
+    });
+
+    this.particleCounter = new TextView({
+      parent: this.view,
+      width: this.view.style.width,
+      height: this.view.style.height / 10,
+      text: "test",
+      fontSize: 32,
+      color: "rgba(0, 255, 0, 1)",
+      strokeColor: "rgba(0, 0, 255, 1)",
+      strokeWidth: 4,
+      backgroundColor: "rgba(25, 25, 25, 1)"
+    });
+
+    this.emitEffect();
+    this.connectToServer();
   };
 
   this.connectToServer = function() {
@@ -24,7 +45,7 @@ exports = Class(GC.Application, function () {
       return;
     }
 
-    this.connection = new WebSocket('ws://localhost:8003');
+    this.connection = new (WebSocket || function () {})('ws://localhost:8003');
     this.connection.onopen = function() {
       console.log("connection open");
       animate(this).clear();
@@ -71,94 +92,11 @@ exports = Class(GC.Application, function () {
         y: PARTICLE_WINDOW_HEIGHT / 2
       });
     });
-
   };
 
-  this.emitTestEffect = function() {
-    console.log('emitting');
-    effectsEngine.emitEffectsFromData(
- {
-    "count": 16,
-    "compositeOperation": "lighter",
-    "params": [],
-    "flipX": false,
-    "flipY": false,
-    "theta": {
-      "range": [0, 6.28]
-    },
-    "r": {
-      "range": [
-        0,
-        6.28
-      ],
-      "delta": {
-        "range": [
-          -4,
-          4
-        ],
-        "targets": [
-          {
-            "value": 0,
-            "delay": 0,
-            "duration": 450
-          }
-        ]
-      }
-    },
-    "radius": {
-      "range": [
-        -5,
-        5
-      ],
-      "delta": {
-        "range": [
-          0,
-          400
-        ],
-        "targets": [
-          {
-            "value": 0,
-            "delay": 0,
-            "duration": 450
-          }
-        ]
-      }
-    },
-    "scale": {
-      "range": [
-        0.25,
-        2.5
-      ],
-      "targets": [
-        {
-          "value": 0,
-          "delay": 0,
-          "duration": 450
-        }
-      ]
-    },
-    "height": 100,
-    "width": 100,
-    "anchorX": 50,
-    "anchorY": 50,
-    "ttl": {
-      "value": 450
-    },
-      image: ["http://localhost:3000/resources/images/explosions/explode_fireWaves_0001.png",
-       "http://localhost:3000/resources/images/explosions/explode_fireWaves_0002.png",
-        "http://localhost:3000/resources/images/explosions/explode_fireWaves_0003.png",
-         "http://localhost:3000/resources/images/explosions/explode_fireWaves_0004.png"
-      ]
-  }, {
-      id: "explosion",
-      x: PARTICLE_WINDOW_WIDTH / 2,
-      y: PARTICLE_WINDOW_HEIGHT / 2
-    });
-  }
   this.emitEffect = function () {
-    console.log("emitting effect");
     var size = 50;
-    var ttl = 450;
+    var ttl = 4500;
     var TAU = 2 * Math.PI;
     effectsEngine.emitEffectsFromData({
       parameters: [],
@@ -170,7 +108,7 @@ exports = Class(GC.Application, function () {
           targets: [{
             value: 0,
             delay: 0,
-            duration: ttl
+            duration: 1
           }]
         }
       },
@@ -182,7 +120,7 @@ exports = Class(GC.Application, function () {
           targets: [{
             value: 0,
             delay: 0,
-            duration: ttl
+            duration: 1
           }]
         }
       },
@@ -195,15 +133,11 @@ exports = Class(GC.Application, function () {
         targets: [{
           value: 0,
           delay: 0,
-          duration: ttl
+          duration: 1
         }]
       },
       ttl: ttl,
-      image: ["http://localhost:3000/resources/images/explosions/explode_fireWaves_0001.png",
-       "http://localhost:3000/resources/images/explosions/explode_fireWaves_0002.png",
-        "http://localhost:3000/resources/images/explosions/explode_fireWaves_0003.png",
-         "http://localhost:3000/resources/images/explosions/explode_fireWaves_0004.png"
-      ],
+      image: "resources/images/particle_images/sparkle.png",
       compositeOperation: 'lighter'
     }, {
       id: "explosion",
@@ -213,7 +147,8 @@ exports = Class(GC.Application, function () {
   };
 
   this.launchUI = function () {
-
+    this.view.tick = bind(this, function () {
+      this.particleCounter.setText(effectsEngine.getActiveCount());
+    });
   };
-
 });
