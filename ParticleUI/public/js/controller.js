@@ -6,8 +6,6 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
    function($scope, $http, $timeout, Upload) {
 
     $scope.variableParameters = [
-      "x",
-      "y",
       "r",
       "scale",
       "scaleX",
@@ -17,29 +15,14 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       "width",
       "anchorX",
       "anchorY",
-      "filterRed",
-      "filterBlue",
-      "filterGreen",
-      "filterAlpha"
     ];
 
-    $scope.tempParameters = [
-    ];
-
-    $scope.variablePolarParameters = [
-      "r",
+    $scope.polarParameters = [
       "theta",
       "radius",
-      "scale",
-      "scaleX",
-      "scaleY",
-      "opacity",
-      "x",
-      "y",
-      "height",
-      "width",
-      "anchorX",
-      "anchorY",
+    ];
+
+    $scope.filterParameters = [
       "filterRed",
       "filterBlue",
       "filterGreen",
@@ -245,20 +228,15 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       // Copying the variable parameters is somewhat more complex
       var variableParameters = $scope.variableParameters;
       if (effectData.polar) {
-        variableParameters = $scope.variablePolarParameters;
-      }
-      for (var i = 0; i < variableParameters.length; i++) {
-        var paramName = variableParameters[i];
-        var param = effectData[paramName];
-        data[paramName] = $scope.buildParameterData(param, paramName, effectData);
-        // Prune any delta params that will always be zero.
-        $scope.pruneDeltaParamIfZero(data[paramName]);
+        $scope.buildParameters(data, effectData, $scope.polarParameters);
       }
 
-      for (var i = 0; i < $scope.tempParameters.length; i++) {
-        var paramName = $scope.tempParameters[i];
-        data[paramName] = effectData[paramName].value;
+      if (effectData.filterType !== "") {
+        $scope.buildParameters(data, effectData, $scope.filterParameters);
       }
+
+      $scope.buildParameters(data, effectData, $scope.variableParameters);
+
 
       for (var i = 0; i < $scope.lifespanParameters.length; i++) {
         var obj = {};
@@ -290,6 +268,16 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
       return data;
 
+    };
+
+    $scope.buildParameters = function(data, effectData, parameters) {
+      for (var i = 0; i < parameters.length; i++) {
+        var paramName = parameters[i];
+        var param = effectData[paramName];
+        data[paramName] = $scope.buildParameterData(param, paramName, effectData);
+        // Prune any delta params that will always be zero.
+        $scope.pruneDeltaParamIfZero(data[paramName]);         
+      }
     };
 
     $scope.pruneDeltaParamIfZero = function(param) {
@@ -475,26 +463,23 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
 
       effectData.polar = $scope.containsPolarCoords(effectJSON);  
 
-      // Copying the variable parameters is somewhat more complex
-      var variableParameters = $scope.variableParameters;
-      if (effectData.polar) {
-        variableParameters = $scope.variablePolarParameters;
-      }
-
       if (effectData.polar) {
         var sections = $scope.polarSectionLayers[index];
       } else {
         sections = $scope.carteseanSectionLayers[index];
       }
 
-      for (var i = 0; i < variableParameters.length; i++) {
-        var paramName = variableParameters[i];
-        var param = effectJSON[paramName];
-        var section = $scope.getParameterSection(paramName, sections);
-        var sectionParameters = sections[section];
-        if (param !== undefined) {
-          $scope.buildParameterFromJSON(param, paramName, sectionParameters, effectData);
-        }
+      $scope.buildParametersFromJSON(
+        effectData, effectJSON, $scope.variableParameters, sections);
+
+      if (effectData.polar) {
+        $scope.buildParametersFromJSON(
+          effectData, effectJSON, $scope.polarParameters, sections);
+      }
+
+      if ((effectData.filterType !== undefined ) && (effectData.filterType !== "")) {
+        $scope.buildParametersFromJSON(
+          effectData, effectJSON, $scope.filterParameters, sections);
       }
 
       for (var i = 0; i < $scope.lifespanParameters.length; i++) {
@@ -504,7 +489,10 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
         if (param === undefined) {
           continue;
         }
-        if (param.value != undefined) {
+        if (!(param instanceof Object)) {
+          obj.state = "value";
+          obj.value = param;
+        } else if (param.value != undefined) {
           obj.state = "value";
           obj.value = param.value;
         } else {
@@ -534,8 +522,28 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
       return null;
     }
 
+    $scope.buildParametersFromJSON = function(effectData, effectJSON, parameters, sections) {
+
+      for (var i = 0; i < parameters.length; i++) {
+        var paramName = parameters[i];
+        var param = effectJSON[paramName];
+        var section = $scope.getParameterSection(paramName, sections);
+        var sectionParameters = sections[section];
+        if (param !== undefined) {
+          $scope.buildParameterFromJSON(param, paramName, sectionParameters, effectData);
+        }
+      }
+    };
+
     $scope.buildParameterFromJSON = function(param, paramName, sectionParameters, effectData) {
       var data = $scope.generateInitialValue(0);
+
+      if (!(param instanceof Object)) {
+        data.value = param;
+        data.initialState = "value";
+        effectData[paramName] = data;
+        return
+      }
 
       if (param.value !== undefined) {
         data.value = param.value;
@@ -607,6 +615,12 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "y",
           "r",
         ],
+        "filter": [
+          "filterRed",
+          "filterBlue",
+          "filterGreen",
+          "filterAlpha"
+        ],
         "display": [
           "scale",
           "scaleX",
@@ -616,11 +630,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "height",
           "width",
           "anchorX",
-          "anchorY",
-          "filterRed",
-          "filterBlue",
-          "filterGreen",
-          "filterAlpha"
+          "anchorY"
         ]
       });
 
@@ -632,6 +642,12 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "theta",
           "radius"
         ],
+        "filter": [
+          "filterRed",
+          "filterBlue",
+          "filterGreen",
+          "filterAlpha"
+        ],
         "display": [
           "scale",
           "scaleX",
@@ -641,11 +657,7 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           "height",
           "width",
           "anchorX",
-          "anchorY",
-          "filterRed",
-          "filterBlue",
-          "filterGreen",
-          "filterAlpha"
+          "anchorY"
         ]
       });
 

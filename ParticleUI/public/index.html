@@ -60,7 +60,7 @@
       <select ng-model="effectData.filterType">
         <option
           ng-repeat="type in filterTypes"
-          value="{{type.name}}">{{type.id}}
+          value="{{type.id}}">{{type.name}}
         </option>
       </select>
     </div>
@@ -81,7 +81,9 @@
       <label>flipY</label><input type="checkbox" ng-model="effectData.flipY">
     </div>
   </div>
-  <div class="editor-section" ng-repeat="(section, parameters) in getSections(effectData)">
+  <div class="editor-section"
+    ng-repeat="(section, parameters) in getSections(effectData)"
+    ng-hide="section === 'filter' && effectData.filterType ===''">
     <div class="section-header">{{section}}</div>
     <hr>
     <div ng-repeat="param in parameters">
