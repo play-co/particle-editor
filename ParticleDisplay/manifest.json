@@ -1,9 +1,20 @@
 {
   "appID": "248d167e30e94b8bb84c18702455f62a",
+  "browser": {
+    "canvas": {
+      "height": 2048,
+      "useWebGL": true,
+      "width": 1536
+    }
+  },
   "dependencies": {
     "devkit-core": "https://github.com/gameclosure/devkit-core#v4.0.7"
   },
   "shortName": "particleeditor",
+  "splash": {
+    "autoHide": true,
+    "universal": "resources/images/particle_images/sparkle.png"
+  },
   "studio": {
     "domain": "www.weeby.co",
     "name": "weeby.co",
