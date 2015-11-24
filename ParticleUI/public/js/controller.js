@@ -6,6 +6,8 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
    function($scope, $http, $timeout, Upload) {
 
     $scope.variableParameters = [
+      "x",
+      "y",
       "r",
       "scale",
       "scaleX",
