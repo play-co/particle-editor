@@ -1,0 +1,14 @@
+{
+  "name": "devkit-particles",
+  "description": "devkit particles",
+  "version": "0.0.1",
+  "devkit": {
+    "buildTargets": {},
+    "clientPaths": {
+      "particles": "src"
+    },
+    "extensions": {
+      "build": "plugin/build"
+    }
+  }
+}
