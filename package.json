@@ -8,7 +8,16 @@
       "particles": "src"
     },
     "extensions": {
+      "debuggerUI": ["debuggerUI"],
+      "standaloneUI": {
+        "particle-editor": "editorUI"
+      },
       "build": "plugin/build"
     }
+  },
+  "dependencies": {
+    "angular": ">= 1.4.7",
+    "ng-file-upload": ">=9.1.2",
+    "isteven-angular-multiselect": ">=4.0.0"
   }
 }

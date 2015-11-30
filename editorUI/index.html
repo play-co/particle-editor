@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Particle Editor</title>
-    <link rel="stylesheet" href="isteven-angular-multiselect/isteven-multi-select.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="angular/angular.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/controller.js"></script>
-    <script src="js/parametervalue.js"></script>
-    <script src="js/collapse.js"></script>
-    <script src="ng-file-upload/dist/ng-file-upload.js"></script>
-    <script src="isteven-angular-multiselect/isteven-multi-select.js"></script>
+  <title>Particle Editor</title>
+
+  <link rel="stylesheet" href="index.css">
+  <script src="src/build.js"></script>
+
 </head>
 <body ng-app="ParticleEditor" ng-controller="EditorController">
   <div class="header">
@@ -36,8 +31,8 @@
     <div class="section-header">Basic Effect Info</div>
     <div>
       <label>Images</label>
-      <isteven-multi-select    
-          input-model="availableFiles"    
+      <isteven-multi-select
+          input-model="availableFiles"
           output-model="effectData.image"
           button-label="name"
           item-label="name"
