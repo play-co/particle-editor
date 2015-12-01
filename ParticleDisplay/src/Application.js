@@ -148,7 +148,7 @@ exports = Class(GC.Application, function () {
 
   this.launchUI = function () {
     this.view.tick = bind(this, function () {
-      this.particleCounter.setText(effectsEngine.getActiveCount());
+      this.particleCounter.setText(effectsEngine.getActiveParticleCount());
     });
   };
 });
