@@ -18,6 +18,7 @@
   "dependencies": {
     "angular": ">= 1.4.7",
     "ng-file-upload": ">=9.1.2",
-    "isteven-angular-multiselect": ">=4.0.0"
+    "isteven-angular-multiselect": ">=4.0.0",
+    "http-fs": "git+https://github.com/weebygames/http-fs.git"
   }
 }

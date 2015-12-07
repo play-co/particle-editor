@@ -1,15 +1,16 @@
 var angular = require('angular');
 var app = angular.module('ParticleEditor.directives', []);
 
+
 app.directive('parametervalue', function() {
   return {
     templateUrl: 'views/parametervalue.html',
     scope: {
-      state: "=state",
-      value: "=singlevalue",
-      range: "=rangevalue",
-      param: "=paramvalue",
-      name: "=paramname",
+      state: '=state',
+      value: '=singlevalue',
+      range: '=rangevalue',
+      param: '=paramvalue',
+      name: '=paramname',
     },
     controller: ['$scope', function($scope) {
       $scope.hasParam = function() {
@@ -21,7 +22,7 @@ app.directive('parametervalue', function() {
       };
 
       $scope.changeState = function() {
-        if ($scope.name != undefined) {
+        if ($scope.name !== undefined) {
           $scope.$emit('kinematic-state-change', $scope.state, $scope.name);
         }
       };
@@ -51,17 +52,17 @@ app.directive('collapsable', function() {
 
       $scope.getStyle = function() {
         if ($scope.collapsed) {
-          return "height: 0";
+          return 'height: 0';
         } else {
           if ($scope.element) {
             var rects = $scope.element.find('ng-transclude')[0].getClientRects();
             var height = 0;
             for (var i = 0; i < rects.length; i++) {
               height = Math.max(rects[i].height, height);
-            } 
-            return "height: " + height + "px";
+            }
+            return 'height: ' + height + 'px';
           }
-          return "height: 100px";
+          return 'height: 100px';
         }
       };
 

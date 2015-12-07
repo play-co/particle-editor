@@ -1,0 +1,95 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>
+      <span>Particle Editor</span>
+    </h2>
+    <span flex></span>
+
+    <md-input-container>
+      <md-select
+        class="md-primary"
+        ng-model="selectedEffect" placeholder="Select an effect"
+      >
+        <md-option
+          ng-value="effect"
+          ng-repeat="effect in EffectLoader.effects"
+        >
+          {{effect.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+</md-toolbar>
+
+<div class="content">
+  <div ng-if="loading">
+    <h1>Loading</h1>
+  </div>
+
+  <particle-effect-editor
+    ng-if="!loading && selectedEffect"
+    effect="selectedEffect"
+  ></particle-effect-editor>
+</div>
+
+
+<!--
+<div class="editor-section"
+  ng-repeat="(section, parameters) in getSections(effectData)"
+  ng-hide="section === 'filter' && effectData.filterType ===''">
+  <div class="section-header">{{section}}</div>
+  <hr>
+  <div ng-repeat="param in parameters">
+    <div ng-include="'views/parameter.html'"></div>
+    <hr>
+  </div>
+</div>
+<div class="editor-section">
+  <div class="section-header">Lifespan</div>
+  <div ng-repeat="param in lifespanParameters">
+    <div class="param-header">
+      {{param}}
+    </div>
+    <div class="param-content">
+      <div class="param-section">
+        <div class="state-header">initial state</div>
+        <parametervalue
+          state="effectData[param].state"
+          singlevalue="effectData[param].value"
+          rangevalue="effectData[param].range"></parametervalue>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<div class="editor-section">
+  <div class="section-header">Parameters</div>
+  <button class="add-button" ng-click="addParameter()">Add Parameter</button>
+  <div ng-repeat="param in effectData.parameters">
+    <div class="evolution-step">
+      <button class="remove-button" ng-click="removeParameter($index)">Remove</button>
+      <div><label>ID:</label><input type="text" ng-model="param.id"></div>
+      <div><label>Distribution Function:</label><select
+            ng-options="easing for easing in easingFunctions"
+            ng-model="param.distributionFunction"></select></div>
+      <div><label>Reset Interval:</label><input type="number" ng-model="param.resetInterval"></div>
+      <div>
+        <label>Distribution Type:</label>
+        <select
+            ng-options="distribution for distribution in distributionTypes"
+            ng-model="param.distributionType">
+        </select>
+      </div>
+      <div>
+        <label>reverse reset</label><input type="checkbox"
+          ng-model="param.reverseReset">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="editor-section">
+  <div class="section-header">Upload Effect File</div>
+  <input type="file" id="effectFile" name="file"/>
+  <button ng-click="uploadEffectFile()">Load Effect</button>
+</div>
+ -->

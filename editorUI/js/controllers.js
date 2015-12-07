@@ -45,7 +45,7 @@ app.controller('EditorController', ['$scope', '$http', '$timeout', 'Upload',
   $scope.lifespanParameters = [
     "ttl",
     "delay",
-  ]
+  ];
 
   $scope.easingFunctions = [
     "linear",
@@ -96,7 +96,8 @@ app.controller('EditorController', ['$scope', '$http', '$timeout', 'Upload',
     "distributionFunction",
     "distributionType",
     "resetInterval",
-    "reverseReset"];
+    "reverseReset"
+  ];
 
   $scope.carteseanSectionLayers = []
   $scope.polarSectionLayers = [];

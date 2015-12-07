@@ -1,0 +1,23 @@
+<md-tabs
+  class="md-primary md-hue-3"
+  md-selected="selectedLayerIndex"
+  md-border-bottom md-autoselect
+>
+  <md-tab
+    ng-repeat="layer in effect.data.layers"
+    label="{{layer.name || 'Layer ' + $index}}"
+  >
+    <p-effect-editor-layer
+      effect="effect"
+      layer-index="$index"
+    ></p-effect-editor-layer>
+  </md-tab>
+</md-tabs>
+
+<md-button
+  class="btn-add-layer md-fab md-primary md-hue-1"
+  aria-label="Add Layer"
+  ng-click="addLayer()"
+>
+  <i class="fa fa-plus"></i>
+</md-button>

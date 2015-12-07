@@ -1,0 +1,86 @@
+<div
+  class="invalid-layer overlay"
+  ng-if="!layerData"
+>
+  <div>Invalid layer index (no layer data)!</div>
+</div>
+
+<div class="button-bar">
+  <md-button
+    class="btn-remove-layer md-fab md-warn"
+    aria-label="Remove Layer"
+    ng-click="removeLayer()"
+    ng-disabled="!effect.canRemoveLayer()"
+  >
+    <i class="fa fa-trash"></i>
+  </md-button>
+
+  <md-button
+    class="btn-edit-name md-fab md-primary"
+    aria-label="Rename Layer"
+    ng-click="renameLayer()"
+  >
+    <i class="fa fa-pencil"></i>
+  </md-button>
+</div>
+
+<div class="editor-section">
+  <div class="section-header">Basic Effect Info</div>
+  <div>
+    <label>Images</label>
+    <isteven-multi-select
+      input-model="availableFiles"
+      output-model="effectData.image"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+    ></isteven-multi-select>
+    <!-- <button class="update-button" ng-click="updateFiles()">Refresh Images</button> -->
+  </div>
+
+  <md-input-container>
+    <label>Composite Operation</label>
+    <md-select
+      ng-model="layerData.compositeOperation"
+      ng-change="effect.save()"
+    >
+      <md-option
+        ng-repeat="operation in compositeOperations"
+        value="{{operation.operation}}"
+      >
+        {{operation.name}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+
+  <md-input-container>
+    <label>Filter Type</label>
+    <md-select
+      ng-model="layerData.filterType"
+      ng-change="effect.save()"
+    >
+      <md-option
+        ng-repeat="type in filterTypes"
+        value="{{type.id}}"
+      >
+        {{type.name}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+
+  <div>
+    <label>Count</label>
+    <input type="number" step=".01" ng-model="effectData.count">
+  </div>
+
+  <div ng-repeat="basicInfoToggle in basicInfoToggles">
+    <md-checkbox
+      class="md-primary"
+      ng-model="layerData[basicInfoToggle.id]"
+      aria-label="basicInfoToggle.name"
+      ng-change="effect.save()"
+    >
+      {{basicInfoToggle.name}}
+    </md-checkbox>
+  </div>
+</div>
