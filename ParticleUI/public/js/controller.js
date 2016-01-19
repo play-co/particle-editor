@@ -593,6 +593,11 @@ angular.module('ParticleEditor.controllers', ['ngFileUpload', "isteven-multi-sel
           data.range[2] = null;
         }
       }
+
+      if ($scope.easingFunctions.indexOf(stepJSON.easing) >= 0) {
+          data.easing = stepJSON.easing;
+      }
+      
       data.delay = stepJSON.delay;
       data.duration = stepJSON.duration;
 
