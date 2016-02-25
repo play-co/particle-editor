@@ -1,25 +1,37 @@
-
-import ui.effectsEngine as effectsEngine;
-import ui.TextView as TextView;
 import device;
 import animate;
+import ui.View as View;
+import ui.TextView as TextView;
+import ui.effectsEngine as effectsEngine;
+
+var BG_WIDTH = 576;
+var BG_HEIGHT = 1024;
 
 exports = Class(GC.Application, function () {
   var PARTICLE_WINDOW_HEIGHT = device.height;
   var PARTICLE_WINDOW_WIDTH = device.width;
 
   this.initUI = function () {
-    this.view.addSubview(effectsEngine);
+    this._setScreenDimensions(BG_WIDTH > BG_HEIGHT);
+    this._rootView = new View({
+      parent: this.view,
+      anchorX: this._baseWidth / 2,
+      anchorY: this._baseHeight / 2,
+      width: this._baseWidth,
+      height: this._baseHeight,
+      scale: this._scale
+    });
+
+    this._rootView.addSubview(effectsEngine);
 
     var paused = false;
-    this.view.onInputSelect = bind(this, function () {
-      this.emitEffect();
-      // paused = !paused;
-      // if (paused) {
-      //   effectsEngine.pauseAllEffects();
-      // } else {
-      //   effectsEngine.resumeAllEffects();
-      // }
+    this._rootView.onInputSelect = bind(this, function () {
+      paused = !paused;
+      if (paused) {
+        effectsEngine.pauseAllEffects();
+      } else {
+        effectsEngine.resumeAllEffects();
+      }
     });
 
     this.particleCounter = new TextView({
@@ -36,6 +48,16 @@ exports = Class(GC.Application, function () {
 
     this.emitEffect();
     this.connectToServer();
+  };
+
+  /**
+   * Scale-to-fit width or height based on portrait or landscape mode
+   */
+  this._setScreenDimensions = function (horz) {
+    var ds = device.screen;
+    this._baseWidth = horz ? ds.width * (BG_HEIGHT / ds.height) : BG_WIDTH;
+    this._baseHeight = horz ? BG_HEIGHT : ds.height * (BG_WIDTH / ds.width);
+    this._scale = horz ? ds.height / BG_HEIGHT : ds.width / BG_WIDTH;
   };
 
   this.connectToServer = function() {

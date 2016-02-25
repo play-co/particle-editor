@@ -8,7 +8,7 @@
     }
   },
   "dependencies": {
-    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.0.7"
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.2.6"
   },
   "shortName": "particleeditor",
   "splash": {
