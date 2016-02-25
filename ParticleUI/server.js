@@ -12,12 +12,15 @@ var PROJECT_FOLDER = process.argv[2];
 
 app.use( bodyParser.json() ); 
 app.use(function(req, res, next) {
-  var parsedUrl = url.parse(req.header('Referer'));
-  res.header({
-    'Access-Control-Allow-Origin': parsedUrl.protocol + '//' + parsedUrl.host,
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-  });
+  var ref = req.header('Referer');
+  if (ref) {
+    var parsedUrl = url.parse(ref);
+    res.header({
+      'Access-Control-Allow-Origin': parsedUrl.protocol + '//' + parsedUrl.host,
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    });
+  }
   next();
 });
 if (PROJECT_FOLDER) {
