@@ -13,6 +13,14 @@
         "particle-editor": "editorUI"
       },
       "build": "plugin/build"
+    },
+    "pluginBuilder": {
+      "jsio": [
+        { "src": "debuggerUI" }
+      ],
+      "generic": [
+        { "src": "editorUI" }
+      ]
     }
   },
   "dependencies": {
